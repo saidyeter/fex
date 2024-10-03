@@ -5,7 +5,7 @@ import { get } from "@/services/file-service";
 export async function getAction(dir : string) {
 
   const result = await get(dir)
-  console.log('getAction', result);
+  // console.log('getAction', result);
 
   if (result) {
 

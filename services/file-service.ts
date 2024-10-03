@@ -1,16 +1,58 @@
+import { FileInfo } from '@/lib/types';
+import { promises as fs } from 'fs';
+import path from 'path';
+ 
+// Generator function to read directory contents
+async function* readDirectory(directory: string, searchKey: string): AsyncGenerator<FileInfo> {
+    const items = await fs.readdir(directory, { withFileTypes: true });
+    for (const item of items) {
+        const itemName = item.name.toLowerCase();
+        const fullPath = path.join(directory, item.name); // Full path
 
-export async function get(dir: string) {
-  console.log("getting content of ", dir);
-  return fakeFiles
-
+        if (!searchKey || itemName.includes(searchKey.toLowerCase())) {
+            yield {
+                name: item.name,
+                fullPath: fullPath, // Include full path
+                isDirectory: item.isDirectory(),
+                isFile: item.isFile(),
+                ext: getExt(item.name),
+                type : item.isFile()? getType(getExt(item.name)):'drive'
+            };
+        }
+    }
 }
 
-export function getExt(name: string) {
-  const ext = name.includes('.') ? name.split('.').slice(-1)[0] : name
+// Function to get files and folders with pagination and search
+export async function get(
+    directory: string,
+    skip: number = 0,
+    limit: number = Infinity,
+    searchKey: string = ''
+): Promise<FileInfo[]> {
+    const results: FileInfo[] = [];
+    const iterator = readDirectory(directory, searchKey);
+
+    for await (const item of iterator) {
+        if (skip > 0) {
+            skip--;
+            continue; // Skip this item
+        }
+        results.push(item);
+        if (results.length >= limit) {
+            break; // Limit reached
+        }
+    }
+
+    return results;
+}
+
+ 
+function getExt(name: string) {
+  const ext = name.includes('.') ? name.split('.').slice(-1)[0] : ''
   return ext
 }
 
-export function getType(ext: string) {
+function getType(ext: string) {
 
   if (isImage(ext)) {
     return "image"
@@ -36,246 +78,12 @@ export function getType(ext: string) {
   if (isCode(ext)) {
     return "code"
   }
-  if (isBinary(ext)) {
+  // if (isBinary(ext)) {
     return "binary"
-  }
-  return "drive"
+  // }
+  // return "unknown"
 }
-
-export interface EntryType {
-  isDir: boolean,
-  name: string,
-  fullPath: string,
-  subDir: EntryType[]
-}
-
-
-const fakeFiles: EntryType[] = [
-  {
-    isDir: false,
-    name: "components.json",
-    fullPath: "/components.json",
-    subDir: []
-  },
-  {
-    isDir: true,
-    name: "app",
-    fullPath: "/app",
-    subDir: [
-      {
-        isDir: false,
-        name: "globals.css",
-        fullPath: "/app/globals.css",
-        subDir: []
-      },
-      {
-        isDir: false,
-        name: "layout.tsx",
-        fullPath: "/app/layout.tsx",
-        subDir: []
-      },
-      {
-        isDir: false,
-        name: "page.tsx",
-        fullPath: "/app/page.tsx",
-        subDir: []
-      },
-    ]
-  },
-  {
-    isDir: true,
-    name: "components",
-    fullPath: "/components",
-    subDir: [
-      {
-        isDir: true,
-        name: "ui",
-        fullPath: "/components/ui",
-        subDir: [
-          {
-            isDir: false,
-            name: "button.tsx",
-            fullPath: "/components/ui/button.tsx",
-            subDir: []
-          },
-        ]
-      },
-    ]
-  },
-  {
-    isDir: true,
-    name: "lib",
-    fullPath: "/lib",
-    subDir: [
-      {
-        isDir: false,
-        name: "utils.ts",
-        fullPath: "/lib/utils.ts",
-        subDir: []
-      },
-    ]
-  },
-
-  {
-    isDir: false,
-    name: "next.config.mjs",
-    fullPath: "/next.config.mjs",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "next-env.d.ts",
-    fullPath: "/next-env.d.ts",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "package.json",
-    fullPath: "/package.json",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "pnpm-lock.yaml",
-    fullPath: "/pnpm-lock.yaml",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "postcss.config.js",
-    fullPath: "/postcss.config.js",
-    subDir: []
-  },
-  {
-    isDir: true,
-    name: "public",
-    fullPath: "/public",
-    subDir: [
-      {
-        isDir: false,
-        name: "globals.css",
-        fullPath: "/public/globals.css",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "android-chrome-192x192.png",
-        fullPath: "/public/android-chrome-192x192.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "android-chrome-512x512.png",
-        fullPath: "/public/android-chrome-512x512.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "apple-touch-icon.png",
-        fullPath: "/public/apple-touch-icon.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "browserconfig.xml",
-        fullPath: "/public/browserconfig.xml",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "favicon-16x16.png",
-        fullPath: "/public/favicon-16x16.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "favicon-32x32.png",
-        fullPath: "/public/favicon-32x32.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "favicon.ico",
-        fullPath: "/public/favicon.ico",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "mstile-150x150.png",
-        fullPath: "/public/mstile-150x150.png",
-        subDir: []
-      },
-
-      {
-        isDir: false,
-        name: "site.webmanifest",
-        fullPath: "/public/site.webmanifest",
-        subDir: []
-      },
-
-    ]
-  },
-
-  {
-    isDir: false,
-    name: "README.md",
-    fullPath: "/README.md",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "tailwind.config.ts",
-    fullPath: "/tailwind.config.ts",
-    subDir: []
-  },
-  {
-    isDir: false,
-    name: "tsconfig.json",
-    fullPath: "/tsconfig.json",
-    subDir: []
-  },
-]
-
-/**
- * 
-├── app
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components
-│   └── ui
-│       └── button.tsx
-├── components.json
-├── lib
-│   └── utils.ts
-├── next.config.mjs
-├── next-env.d.ts
-├── package.json
-├── pnpm-lock.yaml
-├── postcss.config.js
-├── public
-│   ├── android-chrome-192x192.png
-│   ├── android-chrome-512x512.png
-│   ├── apple-touch-icon.png
-│   ├── browserconfig.xml
-│   ├── favicon-16x16.png
-│   ├── favicon-32x32.png
-│   ├── favicon.ico
-│   ├── mstile-150x150.png
-│   ├── site.webmanifest
-├── README.md
-├── tailwind.config.ts
-└── tsconfig.json
-*/
-
+ 
 function isBinary(ext: string) {
   return [
     'exe', // Executable file (Windows)

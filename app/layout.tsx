@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   description: "A file explorer"
 };
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{

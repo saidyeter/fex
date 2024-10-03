@@ -2,7 +2,6 @@
 
 import { getAction } from "@/actions/file";
 import { generateColor } from "@/lib/utils";
-import { EntryType, get, getExt, getType } from "@/services/file-service";
 import { useEffect, useState } from "react";
 import { FileIcon } from "react-file-icon";
 import {
@@ -14,22 +13,23 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { FileInfo } from "@/lib/types";
 
-
+const rootDir = "../"
 export default function Home() {
-  const [content, setContent] = useState([] as EntryType[])
+  const [currentDir, setCurrentDir] = useState(rootDir)
+
+  const [content, setContent] = useState([] as FileInfo[])
 
   useEffect(() => {
 
-    getAction("dir")
+    getAction(currentDir)
       .then(d => {
-
         if (d && d.success) {
           setContent(d.content ?? [])
         }
-
       })
-  }, [])
+  }, [currentDir])
 
   return (
     <main className="min-h-screen container">
@@ -51,12 +51,11 @@ export default function Home() {
 }
 
 type ShowType = "icon" | "list"
-function ContentArea({ content }: { content: EntryType[] }) {
+function ContentArea({ content }: { content: FileInfo[] }) {
   const [showType, setShowType] = useState("icon" as ShowType)
 
   function handleChange(checked: CheckedState) {
 
-    // console.log(checked);
 
     if (checked) {
       setShowType("icon")
@@ -65,6 +64,8 @@ function ContentArea({ content }: { content: EntryType[] }) {
       setShowType("list")
     }
   }
+
+
   return (
     <div className="h-full w-full">
       <div className="h-8 w-full flex items-center gap-1 p-2">
@@ -76,12 +77,12 @@ function ContentArea({ content }: { content: EntryType[] }) {
       <ScrollArea className="h-[calc(100%-2rem)] w-full">
 
         {content.map(c => {
-          return showType == "icon" ?
-            (<ItemInfoIcon {...c} key={c.fullPath} />)
-            :
-            (<ItemInfoLine {...c} key={c.fullPath} />)
+          const propsss = {
+            file: c,
+            showType
+          }
 
-
+          return (<ItemInfo key={c.fullPath} {...propsss} />)
         })}
 
 
@@ -91,58 +92,27 @@ function ContentArea({ content }: { content: EntryType[] }) {
   )
 }
 
-function ItemInfoIcon({ name, fullPath, isDir, subDir }: EntryType) {
-
-  const ext = getExt(isDir ? "folder" : name)
-  // console.log(ext);
-
-  const color = generateColor(ext)
-  // console.log(ext, color);
-
-  const type = getType(ext)
-
-  const icon = <FileIcon
-    color={color}
-    labelColor="black"
-
-    fold={!isDir}
-    type={type}
-    extension={isDir ? undefined : ext}
-  // glyphColor="rgba(255,255,255,0.8)"
-  />
-
-  return (
-    <div className="max-w-24 w-full inline-block m-4">
-      {icon}
-      <p className="text-sm text-center w-full overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
-    </div>
-  )
+type ItemInfo = {
+  file: FileInfo,
+  showType: ShowType
 }
 
-
-
-
-function ItemInfoLine({ name, fullPath, isDir, subDir }: EntryType) {
-
-  const ext = getExt(isDir ? "folder" : name)
-  // console.log(ext);
+function ItemInfo(
+  { file, showType }: ItemInfo) {
+  const { name, fullPath, isDirectory, isFile, type, ext } = file
 
   const color = generateColor(ext)
-  // console.log(ext, color);
-
-  const type = getType(ext)
 
   const icon = <FileIcon
     color={color}
     labelColor="black"
 
-    fold={!isDir}
+    fold={isDirectory}
     type={type}
-    extension={isDir ? undefined : ext}
+    extension={ext}
   // glyphColor="rgba(255,255,255,0.8)"
   />
-
-  return (
+  let content = (
     <div className="flex items-center justify-start gap-4 p-2">
       <div className="max-w-8 w-8">
         {icon}
@@ -150,4 +120,14 @@ function ItemInfoLine({ name, fullPath, isDir, subDir }: EntryType) {
       <p className="text-sm ">{name}</p>
     </div>
   )
-} 
+  if (showType == "icon") {
+    content = (
+      <div className="max-w-24 w-full inline-block m-4">
+        {icon}
+        <p className="text-sm text-center w-full overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
+      </div>
+    )
+  }
+
+  return content
+}
