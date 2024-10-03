@@ -2,6 +2,18 @@ import { FileInfo } from '@/lib/types';
 import { promises as fs } from 'fs';
 import path from 'path';
  
+
+export async function checkDirectoryExistsAsync(dirPath: string): Promise<boolean> {
+  try {
+      const resolvedPath = path.resolve(dirPath);
+      await fs.access(resolvedPath); // Check if path is accessible
+      const stats = await fs.lstat(resolvedPath); // Get file stats
+      return stats.isDirectory(); // Return true if it's a directory
+  } catch (err) {
+      console.error('Error checking directory:', err);
+      return false;
+  }
+}
 // Generator function to read directory contents
 async function* readDirectory(directory: string, searchKey: string): AsyncGenerator<FileInfo> {
     const items = await fs.readdir(directory, { withFileTypes: true });

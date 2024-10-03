@@ -1,8 +1,8 @@
 "use server"
 
-import { get } from "@/services/file-service";
+import { checkDirectoryExistsAsync, get } from "@/services/file-service";
 
-export async function getAction(dir : string) {
+export async function getAction(dir: string) {
 
   const result = await get(dir)
   // console.log('getAction', result);
@@ -19,4 +19,10 @@ export async function getAction(dir : string) {
     chats: []
   }
 }
- 
+
+export async function checkDirAction(dir: string | undefined | null) {
+  if (!dir) {
+    return false
+  }
+  return await checkDirectoryExistsAsync(dir)
+}

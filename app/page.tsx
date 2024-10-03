@@ -1,6 +1,6 @@
 "use client"
 
-import { getAction } from "@/actions/file";
+import { checkDirAction, getAction } from "@/actions/file";
 import { generateColor } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { FileIcon } from "react-file-icon";
@@ -14,19 +14,31 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { FileInfo } from "@/lib/types";
+import { redirect, useSearchParams } from 'next/navigation'
 
 const rootDir = "../"
 export default function Home() {
-  const [currentDir, setCurrentDir] = useState(rootDir)
+  const searchParams = useSearchParams()
+
+  const search = searchParams.get('dir')
+
+  const [currentDir, setCurrentDir] = useState(search ?? rootDir)
 
   const [content, setContent] = useState([] as FileInfo[])
 
   useEffect(() => {
-
-    getAction(currentDir)
+    checkDirAction(currentDir)
       .then(d => {
-        if (d && d.success) {
-          setContent(d.content ?? [])
+        if (d) {
+          getAction(currentDir!)
+            .then(d => {
+              if (d && d.success) {
+                setContent(d.content ?? [])
+              }
+            })
+        }
+        else {
+          redirect('/?dir=../')
         }
       })
   }, [currentDir])
@@ -129,5 +141,13 @@ function ItemInfo(
     )
   }
 
-  return content
+  if (isFile) {
+    return content
+  }
+
+  return (
+    <a href={`/?dir=${fullPath}`}>
+      {content}
+    </a>
+  )
 }
