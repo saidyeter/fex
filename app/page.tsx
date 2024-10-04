@@ -1,6 +1,7 @@
 "use client"
 
 import { checkDirAction, getAction } from "@/actions/file";
+import { ContentArea } from "@/components/content-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   ResizableHandle,
@@ -58,93 +59,4 @@ export default function Home() {
     </main>
   );
 }
-
-type ShowType = "icon" | "list"
-function ContentArea({ content }: { content: FileInfo[] }) {
-  const [showType, setShowType] = useState("icon" as ShowType)
-
-  function handleChange(checked: CheckedState) {
-
-
-    if (checked) {
-      setShowType("icon")
-    }
-    else {
-      setShowType("list")
-    }
-  }
-
-
-  return (
-    <div className="h-full w-full">
-      <div className="h-8 w-full flex items-center gap-1 p-2">
-
-        <Checkbox id="show-type" onCheckedChange={handleChange} defaultChecked />
-        <label htmlFor="show-type">Show as Icon</label>
-
-      </div>
-      <ScrollArea className="h-[calc(100%-2rem)] w-full">
-
-        {content.map(c => {
-          const propsss = {
-            file: c,
-            showType
-          }
-
-          return (<ItemInfo key={c.fullPath} {...propsss} />)
-        })}
-
-
-        <ScrollBar />
-      </ScrollArea>
-    </div>
-  )
-}
-
-type ItemInfo = {
-  file: FileInfo,
-  showType: ShowType
-}
-
-function ItemInfo(
-  { file, showType }: ItemInfo) {
-  const { name, fullPath, isDirectory, isFile, type, ext } = file
-  const router = useRouter()
-  const color = generateColor(ext)
-
-  const icon = <FileIcon
-    color={color}
-    labelColor="black"
-
-    fold={isDirectory}
-    type={type}
-    extension={ext}
-  // glyphColor="rgba(255,255,255,0.8)"
-  />
-  let content = (
-    <div className="flex items-center justify-start gap-4 p-2">
-      <div className="max-w-8 w-8">
-        {icon}
-      </div>
-      <p className="text-sm ">{name}</p>
-    </div>
-  )
-  if (showType == "icon") {
-    content = (
-      <div className="max-w-24 w-full inline-block m-4">
-        {icon}
-        <p className="text-sm text-center w-full overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
-      </div>
-    )
-  }
-
-  if (isFile) {
-    return content
-  }
-
-  return (
-    <button onClick={() => router.push(`?dir=${fullPath}`)} >
-      {content}
-    </button>
-  )
-}
+ 
