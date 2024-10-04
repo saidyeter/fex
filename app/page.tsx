@@ -1,36 +1,33 @@
 "use client"
 
 import { checkDirAction, getAction } from "@/actions/file";
-import { generateColor } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { FileIcon } from "react-file-icon";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CheckedState } from "@radix-ui/react-checkbox";
+} from "@/components/ui/resizable";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { FileInfo } from "@/lib/types";
-import { redirect, useSearchParams } from 'next/navigation'
+import { generateColor } from "@/lib/utils";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { FileIcon } from "react-file-icon";
 
 const rootDir = "../"
 export default function Home() {
   const searchParams = useSearchParams()
 
   const search = searchParams.get('dir')
-
-  const [currentDir, setCurrentDir] = useState(search ?? rootDir)
-
+  const router = useRouter()
   const [content, setContent] = useState([] as FileInfo[])
 
   useEffect(() => {
-    checkDirAction(currentDir)
+    checkDirAction(search ?? rootDir)
       .then(d => {
         if (d) {
-          getAction(currentDir!)
+          getAction(search ?? rootDir!)
             .then(d => {
               if (d && d.success) {
                 setContent(d.content ?? [])
@@ -38,10 +35,10 @@ export default function Home() {
             })
         }
         else {
-          redirect('/?dir=../')
+          router.push(`?dir=${rootDir}`)
         }
       })
-  }, [currentDir])
+  }, [search])
 
   return (
     <main className="min-h-screen container">
@@ -112,7 +109,7 @@ type ItemInfo = {
 function ItemInfo(
   { file, showType }: ItemInfo) {
   const { name, fullPath, isDirectory, isFile, type, ext } = file
-
+  const router = useRouter()
   const color = generateColor(ext)
 
   const icon = <FileIcon
@@ -146,8 +143,8 @@ function ItemInfo(
   }
 
   return (
-    <a href={`/?dir=${fullPath}`}>
+    <button onClick={() => router.push(`?dir=${fullPath}`)} >
       {content}
-    </a>
+    </button>
   )
 }
