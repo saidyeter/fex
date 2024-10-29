@@ -2,22 +2,18 @@
 
 import { checkDirAction, getAction } from "@/actions/file";
 import { ContentArea } from "@/components/content-area";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { FileInfo } from "@/lib/types";
-import { generateColor } from "@/lib/utils";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from "react";
-import { FileIcon } from "react-file-icon";
+import { Suspense, useEffect, useState } from "react";
 
 const rootDir = "../"
-export default function Home() {
+
+function HomeComponent() {
   const searchParams = useSearchParams()
 
   const search = searchParams.get('dir')
@@ -39,7 +35,7 @@ export default function Home() {
           router.push(`?dir=${rootDir}`)
         }
       })
-  }, [search])
+  }, [search, router])
 
   return (
     <main className="min-h-screen container">
@@ -59,4 +55,11 @@ export default function Home() {
     </main>
   );
 }
- 
+
+// this component is for to avoid this error
+// ⨯ useSearchParams() should be wrapped in a suspense boundary at page "/". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+export default function Page() {
+  return <Suspense fallback={<div>loading...</div>}>
+    <HomeComponent />
+  </Suspense>
+}
