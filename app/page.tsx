@@ -2,12 +2,14 @@
 
 import { checkDirAction, getAction } from "@/actions/file";
 import { ContentArea } from "@/components/content-area";
+import { TopMenu } from "@/components/top-menu";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { FileInfo } from "@/lib/types";
+import { useLang } from "@/lib/useLang";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from "react";
 
@@ -15,7 +17,7 @@ const rootDir = "../"
 
 function HomeComponent() {
   const searchParams = useSearchParams()
-
+  const { txt } = useLang()
   const search = searchParams.get('dir')
   const router = useRouter()
   const [content, setContent] = useState([] as FileInfo[])
@@ -39,7 +41,10 @@ function HomeComponent() {
 
   return (
     <main className="min-h-screen container">
-      <div className="h-16">header</div>
+      <div className="h-16">
+        <TopMenu />
+
+      </div>
       <div className="h-[calc(100vh-6rem)]">
         <ResizablePanelGroup id={'content'} direction="horizontal">
           <ResizablePanel order={1} defaultSize={10}>One</ResizablePanel>
