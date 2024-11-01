@@ -7,8 +7,6 @@ import { generateColor } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
 import { useContext } from "react";
 import { FileIcon } from "../lib/react-file-icon";
-// import { FileIcon } from "react-file-icon";
-// import FileIcon from "./file-icon";
 import { Toolbar } from "./toolbar";
 
 
@@ -45,6 +43,7 @@ function ItemInfo({ file }: ItemInfoProps) {
     labelColor="black"
     type={isDirectory ? 'drive' : 'spreadsheet'}
     extension={isFile ? ext : ""}
+    isDirectory={isDirectory}
   />
 
   let twSize = "max-w-24";
