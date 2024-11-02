@@ -1,20 +1,30 @@
 "use client"
 
+import { getAction } from "@/actions/file";
 import { PreferencesContext } from "@/components/preferences-context";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { FileInfo } from "@/lib/types";
 import { generateColor } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FileIcon } from "../lib/react-file-icon";
 import { Toolbar } from "./toolbar";
 
+export function ContentArea({ path }: { path: string }) {
+  const [content, setContent] = useState([] as FileInfo[])
+  useEffect(() => {
 
-export function ContentArea({ content }: { content: FileInfo[] }) {
+    getAction(path)
+      .then(d => {
+        if (d && d.success) {
+          setContent(d.content ?? [])
+        }
+      })
+  }, [path])
 
   return (
     <div className="h-full w-full">
-      <Toolbar />
+      <Toolbar path={path} />
       <ScrollArea className="h-[calc(100%-2rem)] w-full">
         {content.map(c => <ItemInfo key={c.fullPath} file={c} />)}
         <ScrollBar />
@@ -30,17 +40,19 @@ type ItemInfoProps = {
 function ItemInfo({ file }: ItemInfoProps) {
 
 
+
   const [preferences,] = useContext(PreferencesContext)
   const showType = preferences.showType
   const size = preferences.size
 
   const { name, fullPath, isDirectory, isFile, ext } = file
   const router = useRouter()
-  const color = generateColor(isFile ? ext : "")
+  const color = isFile ? generateColor(ext) : preferences.theme == 'dark' ? "#666" : "#ddd"
 
   const icon = <FileIcon
     color={color}
-    labelColor="black"
+    labelColor={preferences.theme == 'dark' ? "white" : "black"}
+    labelTextColor={preferences.theme == 'dark' ? "black" : "white"}
     type={isDirectory ? 'drive' : 'spreadsheet'}
     extension={isFile ? ext : ""}
     isDirectory={isDirectory}
@@ -90,7 +102,7 @@ function ItemInfo({ file }: ItemInfoProps) {
   }
 
   return (
-    <button onClick={() => router.push(`?dir=${fullPath}`)} >
+    <button onClick={() => router.push(`?dir=${btoa(fullPath)}`)} >
       {content}
     </button>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { checkDirAction, getAction } from "@/actions/file";
+import { checkDirAction } from "@/actions/file";
 import { ContentArea } from "@/components/content-area";
 import { TopMenu } from "@/components/top-menu";
 import {
@@ -8,33 +8,23 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { FileInfo } from "@/lib/types";
-import { useLang } from "@/lib/useLang";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 
 const rootDir = "../"
 
 function HomeComponent() {
   const searchParams = useSearchParams()
-  const { txt } = useLang()
-  const search = searchParams.get('dir')
+  const searchEncoded = searchParams.get('dir')
+  const search = convertFromBase64(searchEncoded)
   const router = useRouter()
-  const [content, setContent] = useState([] as FileInfo[])
 
   useEffect(() => {
+
     checkDirAction(search ?? rootDir)
       .then(d => {
-        if (d) {
-          getAction(search ?? rootDir!)
-            .then(d => {
-              if (d && d.success) {
-                setContent(d.content ?? [])
-              }
-            })
-        }
-        else {
-          router.push(`?dir=${rootDir}`)
+        if (!d) {
+          router.push(`?dir=${btoa(rootDir)}`)
         }
       })
   }, [search, router])
@@ -50,7 +40,7 @@ function HomeComponent() {
           <ResizablePanel order={1} defaultSize={10}>One</ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel order={2} defaultSize={80} minSize={35}>
-            <ContentArea content={content} />
+            <ContentArea path={search} />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel order={3} defaultSize={10}>three</ResizablePanel>
@@ -67,4 +57,16 @@ export default function Page() {
   return <Suspense fallback={<div>loading...</div>}>
     <HomeComponent />
   </Suspense>
+}
+
+function convertFromBase64(str: string | null | undefined) {
+  if (str && str.length > 0) {
+    try {
+      return Buffer.from(str, 'base64').toString('utf-8')
+    } catch (error) {
+
+    }
+  }
+
+  return ''
 }
