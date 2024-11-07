@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useLang } from "@/lib/useLang";
+import { useLang } from "@/lib/hooks/useLang";
 import { ArrowLeft, ArrowRight, ArrowUp, Clipboard, Copy, FileArchive, Scissors, TextCursor } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { Button } from "./ui/button";
@@ -28,7 +28,7 @@ export function Toolbar({ path }: { path: string }) {
           {txt('forward')}
         </Button>
         <div className="border-l border-muted border h-10"></div>
-        <Label className="border-muted rounded-lg border-2 flex-1 p-2">{path}</Label>
+        <Label className="border-muted rounded-lg border-2 flex-1 p-2 h-10 ">{path}</Label>
       </div>
 
       <div className="w-full flex items-center justify-start gap-1 p-2 border-b border-muted flex-wrap">

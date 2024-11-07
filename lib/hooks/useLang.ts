@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { PreferencesContext } from "../components/preferences-context";
-import lang from "../data/lang.json";
+import lang from "../../data/lang.json";
+import { PreferencesContext } from "../../data/preferences-provider";
 
 export function useLang() {
 

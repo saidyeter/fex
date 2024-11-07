@@ -1,32 +1,67 @@
 "use client"
 
-import { getAction } from "@/actions/file";
-import { PreferencesContext } from "@/components/preferences-context";
+import { checkDirAction, getAction } from "@/actions/file";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { PreferencesContext } from "@/data/preferences-provider";
+import { Tab } from "@/lib/db";
 import { FileInfo } from "@/lib/types";
 import { generateColor } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from "react";
 import { FileIcon } from "../lib/react-file-icon";
 import { Toolbar } from "./toolbar";
 
-export function ContentArea({ path }: { path: string }) {
+export function ContentArea({ tab }: { tab: Tab }) {
+
+  const dirPath = tab.path
+  const [isDir, setIsDir] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    checkDirAction(dirPath ?? '')
+      .then(d => {
+        if (!d) {
+          router.push(`/`)
+        }
+        else {
+          setIsDir(true)
+        }
+      })
+  }, [dirPath, router])
+
+
   const [content, setContent] = useState([] as FileInfo[])
   useEffect(() => {
 
-    getAction(path)
+    getAction(dirPath)
       .then(d => {
         if (d && d.success) {
           setContent(d.content ?? [])
         }
       })
-  }, [path])
+  }, [dirPath])
 
+
+  if (!isDir) {
+    return <div>loading...</div>
+  }
+
+  const params = new URLSearchParams()
+  params.append('tab', tab.order?.toString() ?? '')
+  params.append('take', tab.take.toString())
+  params.append('skip', tab.skip.toString())
+  if (tab.search) {
+    params.append('search', tab.search)
+  }
+  if (tab.orderBy) {
+    params.append('orderBy', tab.orderBy)
+  }
   return (
     <div className="h-full w-full">
-      <Toolbar path={path} />
+      <Toolbar path={dirPath} />
       <ScrollArea className="h-[calc(100%-2rem)] w-full">
-        {content.map(c => <ItemInfo key={c.fullPath} file={c} />)}
+        {content.map(c => <ItemInfo key={c.fullPath} file={c} params={params.toString()} />)}
         <ScrollBar />
       </ScrollArea>
     </div>
@@ -35,11 +70,10 @@ export function ContentArea({ path }: { path: string }) {
 
 type ItemInfoProps = {
   file: FileInfo,
+  params: string
 }
 
-function ItemInfo({ file }: ItemInfoProps) {
-
-
+function ItemInfo({ file, params }: ItemInfoProps) {
 
   const [preferences,] = useContext(PreferencesContext)
   const showType = preferences.showType
@@ -102,8 +136,8 @@ function ItemInfo({ file }: ItemInfoProps) {
   }
 
   return (
-    <button onClick={() => router.push(`?dir=${btoa(fullPath)}`)} >
+    <Link href={`?dir=${btoa(fullPath)}&${params}`} >
       {content}
-    </button>
+    </Link>
   )
 }

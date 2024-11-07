@@ -20,6 +20,7 @@ async function* readDirectory(directory: string, searchKey: string): AsyncGenera
   for (const item of items) {
     const itemName = item.name.toLowerCase();
     const fullPath = path.join(directory, item.name); // Full path
+    console.log('readDirectory', fullPath, directory, item.name);
 
     if (!searchKey || itemName.includes(searchKey.toLowerCase())) {
       yield {

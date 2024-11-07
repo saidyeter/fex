@@ -1,20 +1,23 @@
 // 'use client'
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { PreferenceProvider } from "../components/preferences-context";
+import { TabsProvider } from "@/data/tabs-provider";
+import { ThemeProvider } from "@/data/theme-provider";
+import { PreferenceProvider } from "../data/preferences-provider";
 
 export function ContextProvider({ children }: { children: React.ReactNode }) {
 
-    return (
-        <PreferenceProvider>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                {children}
-            </ThemeProvider>
-        </PreferenceProvider>
-    )
+  return (
+    <PreferenceProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <TabsProvider>
+          {children}
+        </TabsProvider>
+      </ThemeProvider>
+    </PreferenceProvider>
+  )
 }

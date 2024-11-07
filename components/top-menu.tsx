@@ -1,5 +1,4 @@
 'use client'
-import { PreferencesContext } from "@/components/preferences-context";
 import {
   Menubar,
   MenubarContent,
@@ -14,12 +13,13 @@ import {
   MenubarSubTrigger,
   MenubarTrigger
 } from "@/components/ui/menubar";
-import { useLang } from "@/lib/useLang";
+import { PreferencesContext } from "@/data/preferences-provider";
+import { useLang } from "@/lib/hooks/useLang";
 import { useTheme } from "next-themes";
 import { useRouter } from 'next/navigation';
 import { useContext } from "react";
 
-export function TopMenu() {
+export function TopMenu({ onNewTab }: { onNewTab: (_path: string) => void }) {
   const [preferences, setPreferences] = useContext(PreferencesContext)
 
   const { txt } = useLang()
@@ -80,7 +80,7 @@ export function TopMenu() {
       <MenubarMenu>
         <MenubarTrigger>{txt('file')}</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>
+          <MenubarItem onClick={() => onNewTab('../')}>
             New Tab <MenubarShortcut>⌘T</MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
