@@ -60,7 +60,7 @@ export function ContentArea({ tab }: { tab: Tab }) {
   return (
     <div className="h-full w-full">
       <Toolbar path={dirPath} />
-      <ScrollArea className="h-[calc(100%-2rem)] w-full">
+      <ScrollArea className="h-[calc(100%-9.7rem)] w-full">
         {content.map(c => <ItemInfo key={c.fullPath} file={c} params={params.toString()} />)}
         <ScrollBar />
       </ScrollArea>

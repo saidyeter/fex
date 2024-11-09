@@ -40,7 +40,7 @@ async function update(
     setTabs([
       {
         order: 1,
-        name: 'home',
+        name: 'tab 1',
         path: path,
         take: take,
         skip: skip,
@@ -61,7 +61,6 @@ export function useTabs(searchParams: ReadonlyURLSearchParams) {
   }, [searchParams])
 
   async function addTab(tab: Tab) {
-    // console.log('addTab useTabs');
     if (tab) {
       setTabs([
         ...tabs,
