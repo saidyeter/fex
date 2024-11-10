@@ -1,4 +1,4 @@
-import { ReadonlyURLSearchParams } from "next/navigation";
+import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { Tab } from "../db";
 
@@ -52,8 +52,8 @@ async function update(
 
 }
 
-export function useTabs(searchParams: ReadonlyURLSearchParams) {
-
+export function useTabs() {
+  const searchParams: ReadonlyURLSearchParams = useSearchParams()
   const [tabs, setTabs] = useContext(TabsContext)
 
   useEffect(() => {
@@ -74,7 +74,8 @@ export function useTabs(searchParams: ReadonlyURLSearchParams) {
     // removeTab: removeItem,
     // updateTab: updateItem,
     // getTab: getItem,
-    tabs
+    tabs,
+    currentTabId: searchParams.get('tab')
   }
 }
 function convertFromBase64(str: string | null | undefined) {
