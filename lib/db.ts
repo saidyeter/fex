@@ -1,4 +1,4 @@
-import Dexie, { type EntityTable } from 'dexie';
+// import Dexie, { type EntityTable } from 'dexie';
 
 // export class TabDb extends Dexie {
 //   tabs!: Dexie.Table<Tab, number>;
@@ -25,16 +25,16 @@ export interface Tab {
 }
 
 
-const db = new Dexie('TabDb') as Dexie & {
-  tabs: EntityTable<
-    Tab,
-    'order' // primary key "id" (for the typings only)
-  >;
-};
+// const db = new Dexie('TabDb') as Dexie & {
+//   tabs: EntityTable<
+//     Tab,
+//     'order' // primary key "id" (for the typings only)
+//   >;
+// };
 
-// Schema declaration:
-db.version(1).stores({
-  tabs: "++id,name,path,order,take,skip,search,orderBy",
-});
+// // Schema declaration:
+// db.version(1).stores({
+//   tabs: "++id,name,path,order,take,skip,search,orderBy",
+// });
 
-export { db };
+// export { db };
