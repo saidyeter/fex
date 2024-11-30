@@ -42,3 +42,6 @@ export default function TopTabbar() {
     </ul>
   );
 }
+
+// more animations
+// https://github.com/samselikoff/2022-08-24-staggered-imessage-animation/commit/c2b72e20cf8f6cbf7f4f3bc98a631f6c98b7cbf5
