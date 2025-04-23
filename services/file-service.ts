@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { FileInfo } from '@/lib/types';
+import { DirParams, FileInfo } from '@/lib/types';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -36,12 +36,14 @@ async function* readDirectory(directory: string, searchKey: string): AsyncGenera
 }
 
 // Function to get files and folders with pagination and search
-export async function get(
-  directory: string,
-  skip: number = 0,
-  limit: number = Infinity,
-  searchKey: string = ''
-): Promise<FileInfo[]> {
+export async function get(dirParams: DirParams): Promise<FileInfo[]> {
+  const directory = dirParams.path;
+  let skip = dirParams.skip;
+  const limit = dirParams.take;
+  const searchKey = dirParams.search;
+  // const order = dirParams.order;
+  // const orderBy = dirParams.orderBy;
+
   const results: FileInfo[] = [];
   const iterator = readDirectory(directory, searchKey);
 

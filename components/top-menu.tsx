@@ -19,7 +19,7 @@ import { useTheme } from "next-themes";
 import { useRouter } from 'next/navigation';
 import { useContext } from "react";
 
-export function TopMenu({ onNewTab }: { onNewTab: (_path: string) => void }) {
+export function TopMenu() {
   const [preferences, setPreferences] = useContext(PreferencesContext)
 
   const { txt } = useLang()
@@ -80,11 +80,9 @@ export function TopMenu({ onNewTab }: { onNewTab: (_path: string) => void }) {
       <MenubarMenu>
         <MenubarTrigger>{txt('file')}</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem onClick={() => onNewTab('../')}>
-            New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+          <MenubarItem onClick={() => router.push(`/`)}>
+            {txt('home-page')} <MenubarShortcut>⌘H</MenubarShortcut>
           </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem onClick={() => router.push(`/`)}>{txt('home-page')}</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>

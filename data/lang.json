@@ -1,238 +1,64 @@
 {
   "en": [
-    {
-      "key": "en",
-      "value": "English"
-    },
-    {
-      "key": "tr",
-      "value": "Turkish"
-    },
-    {
-      "key": "xs",
-      "value": "Extra Small"
-    },
-    {
-      "key": "sm",
-      "value": "Small"
-    },
-    {
-      "key": "md",
-      "value": "Medium"
-    },
-    {
-      "key": "lg",
-      "value": "Large"
-    },
-    {
-      "key": "xl",
-      "value": "Extra Large"
-    },
-    {
-      "key": "2xl",
-      "value": "Extra Extra Large"
-    },
-    {
-      "key": "list",
-      "value": "List"
-    },
-    {
-      "key": "light",
-      "value": "Light"
-    },
-    {
-      "key": "dark",
-      "value": "Dark"
-    },
-    {
-      "key": "system",
-      "value": "System"
-    },
-    {
-      "key": "appearance",
-      "value": "Appearance"
-    },
-    {
-      "key": "language",
-      "value": "Language"
-    },
-    {
-      "key": "theme",
-      "value": "Theme"
-    },
-    {
-      "key": "size",
-      "value": "Size"
-    },
-    {
-      "key": "file",
-      "value": "File"
-    },
-    {
-      "key": "home-page",
-      "value": "Home Page"
-    },
-    {
-      "key": "default",
-      "value": "Default"
-    },
-    {
-      "key": "icon",
-      "value": "Icon"
-    },
-    {
-      "key": "preferences",
-      "value": "Preferences"
-    },
-    {
-      "key": "cut",
-      "value": "Cut"
-    },
-    {
-      "key": "copy",
-      "value": "Copy"
-    },
-    {
-      "key": "paste",
-      "value": "Paste"
-    },
-    {
-      "key": "rename",
-      "value": "Rename"
-    },
-    {
-      "key": "compress",
-      "value": "Compress"
-    },
-    {
-      "key": "back",
-      "value": "Back"
-    },
-    {
-      "key": "up",
-      "value": "Up"
-    },
-    {
-      "key": "forward",
-      "value": "Forward"
-    }
+    { "key": "en", "value": "English" },
+    { "key": "tr", "value": "Turkish" },
+    { "key": "xs", "value": "Extra Small" },
+    { "key": "sm", "value": "Small" },
+    { "key": "md", "value": "Medium" },
+    { "key": "lg", "value": "Large" },
+    { "key": "xl", "value": "Extra Large" },
+    { "key": "2xl", "value": "Extra Extra Large" },
+    { "key": "list", "value": "List" },
+    { "key": "light", "value": "Light" },
+    { "key": "dark", "value": "Dark" },
+    { "key": "system", "value": "System" },
+    { "key": "appearance", "value": "Appearance" },
+    { "key": "language", "value": "Language" },
+    { "key": "theme", "value": "Theme" },
+    { "key": "size", "value": "Size" },
+    { "key": "file", "value": "File" },
+    { "key": "home-page", "value": "Home Page" },
+    { "key": "default", "value": "Default" },
+    { "key": "icon", "value": "Icon" },
+    { "key": "preferences", "value": "Preferences" },
+    { "key": "cut", "value": "Cut" },
+    { "key": "copy", "value": "Copy" },
+    { "key": "paste", "value": "Paste" },
+    { "key": "rename", "value": "Rename" },
+    { "key": "compress", "value": "Compress" },
+    { "key": "back", "value": "Back" },
+    { "key": "up", "value": "Up" },
+    { "key": "forward", "value": "Forward" }
   ],
   "tr": [
-    {
-      "key": "en",
-      "value": "İngilizce"
-    },
-    {
-      "key": "tr",
-      "value": "Türkçe"
-    },
-    {
-      "key": "xs",
-      "value": "Ekstra Küçük"
-    },
-    {
-      "key": "sm",
-      "value": "Küçük"
-    },
-    {
-      "key": "md",
-      "value": "Orta"
-    },
-    {
-      "key": "lg",
-      "value": "Büyük"
-    },
-    {
-      "key": "xl",
-      "value": "Ekstra Büyük"
-    },
-    {
-      "key": "2xl",
-      "value": "Ekstra Ekstra Büyük"
-    },
-    {
-      "key": "list",
-      "value": "Liste"
-    },
-    {
-      "key": "light",
-      "value": "Aydınlık"
-    },
-    {
-      "key": "dark",
-      "value": "Karanlık"
-    },
-    {
-      "key": "system",
-      "value": "Sistem"
-    },
-    {
-      "key": "appearance",
-      "value": "Görünüm"
-    },
-    {
-      "key": "language",
-      "value": "Dil"
-    },
-    {
-      "key": "theme",
-      "value": "Tema"
-    },
-    {
-      "key": "size",
-      "value": "Boyut"
-    },
-    {
-      "key": "file",
-      "value": "Dosya"
-    },
-    {
-      "key": "home-page",
-      "value": "Ana Sayfa"
-    },
-    {
-      "key": "default",
-      "value": "Varsayılan"
-    },
-    {
-      "key": "icon",
-      "value": "Simge"
-    },
-    {
-      "key": "preferences",
-      "value": "Tercihler"
-    },
-    {
-      "key": "cut",
-      "value": "Kes"
-    },
-    {
-      "key": "copy",
-      "value": "Kopyala"
-    },
-    {
-      "key": "paste",
-      "value": "Yapıştır"
-    },
-    {
-      "key": "rename",
-      "value": "Yeniden Adlandır"
-    },
-    {
-      "key": "compress",
-      "value": "Sıkıştır"
-    },
-    {
-      "key": "back",
-      "value": "Geri"
-    },
-    {
-      "key": "up",
-      "value": "Yukarı"
-    },
-    {
-      "key": "forward",
-      "value": "İleri"
-    }
+    { "key": "en", "value": "İngilizce" },
+    { "key": "tr", "value": "Türkçe" },
+    { "key": "xs", "value": "Ekstra Küçük" },
+    { "key": "sm", "value": "Küçük" },
+    { "key": "md", "value": "Orta" },
+    { "key": "lg", "value": "Büyük" },
+    { "key": "xl", "value": "Ekstra Büyük" },
+    { "key": "2xl", "value": "Ekstra Ekstra Büyük" },
+    { "key": "list", "value": "Liste" },
+    { "key": "light", "value": "Aydınlık" },
+    { "key": "dark", "value": "Karanlık" },
+    { "key": "system", "value": "Sistem" },
+    { "key": "appearance", "value": "Görünüm" },
+    { "key": "language", "value": "Dil" },
+    { "key": "theme", "value": "Tema" },
+    { "key": "size", "value": "Boyut" },
+    { "key": "file", "value": "Dosya" },
+    { "key": "home-page", "value": "Ana Sayfa" },
+    { "key": "default", "value": "Varsayılan" },
+    { "key": "icon", "value": "Simge" },
+    { "key": "preferences", "value": "Tercihler" },
+    { "key": "cut", "value": "Kes" },
+    { "key": "copy", "value": "Kopyala" },
+    { "key": "paste", "value": "Yapıştır" },
+    { "key": "rename", "value": "Yeniden Adlandır" },
+    { "key": "compress", "value": "Sıkıştır" },
+    { "key": "back", "value": "Geri" },
+    { "key": "up", "value": "Yukarı" },
+    { "key": "forward", "value": "İleri" }
   ]
 }

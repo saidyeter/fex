@@ -3,7 +3,7 @@
 import { checkDirAction, getAction } from "@/actions/file";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PreferencesContext } from "@/data/preferences-provider";
-import { Tab } from "@/lib/db";
+import { useDirParams } from "@/lib/hooks/use-dir-params";
 import { FileInfo } from "@/lib/types";
 import { generateColor } from "@/lib/utils";
 import Link from "next/link";
@@ -12,29 +12,23 @@ import { useContext, useEffect, useState } from "react";
 import { FileIcon } from "../lib/react-file-icon";
 import { Toolbar } from "./toolbar";
 
-export function ContentArea({ tab }: { tab: Tab }) {
-
-  const dirPath = tab.path
+export function ContentArea({ }: {}) {
+  const dirParams = useDirParams();
+  const dirPath = dirParams.path;
   const [isDir, setIsDir] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     checkDirAction(dirPath ?? '')
       .then(d => {
-        if (!d) {
-          router.push(`/`)
-        }
-        else {
-          setIsDir(true)
-        }
+        if (!d) { router.push(`/`) }
+        else { setIsDir(true) }
       })
   }, [dirPath, router])
 
-
   const [content, setContent] = useState([] as FileInfo[])
   useEffect(() => {
-
-    getAction(dirPath)
+    getAction(dirParams)
       .then(d => {
         if (d && d.success) {
           setContent(d.content ?? [])
@@ -47,21 +41,12 @@ export function ContentArea({ tab }: { tab: Tab }) {
     return <div>loading...</div>
   }
 
-  const params = new URLSearchParams()
-  params.append('tab', tab.order?.toString() ?? '')
-  params.append('take', tab.take.toString())
-  params.append('skip', tab.skip.toString())
-  if (tab.search) {
-    params.append('search', tab.search)
-  }
-  if (tab.orderBy) {
-    params.append('orderBy', tab.orderBy)
-  }
+
   return (
     <div className="h-full w-full">
       <Toolbar path={dirPath} />
       <ScrollArea className="h-[calc(100%-9.7rem)] w-full">
-        {content.map(c => <ItemInfo key={c.fullPath} file={c} params={params.toString()} />)}
+        {content.map(c => <ItemInfo key={c.fullPath} file={c} />)}
         <ScrollBar />
       </ScrollArea>
     </div>
@@ -70,17 +55,15 @@ export function ContentArea({ tab }: { tab: Tab }) {
 
 type ItemInfoProps = {
   file: FileInfo,
-  params: string
 }
 
-function ItemInfo({ file, params }: ItemInfoProps) {
+function ItemInfo({ file, }: ItemInfoProps) {
 
   const [preferences,] = useContext(PreferencesContext)
   const showType = preferences.showType
   const size = preferences.size
 
   const { name, fullPath, isDirectory, isFile, ext } = file
-  const router = useRouter()
   const color = isFile ? generateColor(ext) : preferences.theme == 'dark' ? "#666" : "#ddd"
 
   const icon = <FileIcon
@@ -136,7 +119,7 @@ function ItemInfo({ file, params }: ItemInfoProps) {
   }
 
   return (
-    <Link href={`?dir=${btoa(fullPath)}&${params}`} >
+    <Link href={`?p=${btoa(fullPath)}`} >
       {content}
     </Link>
   )
