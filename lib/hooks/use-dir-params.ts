@@ -11,12 +11,12 @@ const ORDER_BY_QUERY_KEY = 'ob'
 export function useDirParams() {
   const searchParams = useSearchParams()
   const encodedPath = searchParams.get(PATH_QUERY_KEY)
-  const path = encodedPath ? atob(encodedPath) : './'
+  const path = encodedPath ? atob(encodedPath) : '/users/saidyeter/downloads'
   let order = searchParams.get(ORDER_QUERY_KEY)
   if (order !== 'desc' && order !== 'asc') {
     order = 'asc'
   }
-  const take = getNum(searchParams.get(TAKE_QUERY_KEY), 10)
+  const take = getNum(searchParams.get(TAKE_QUERY_KEY), 50)
   const skip = getNum(searchParams.get(SKIP_QUERY_KEY), 0)
   const search = searchParams.get(SEARCH_QUERY_KEY) ?? ''
   const orderBy = searchParams.get(ORDER_BY_QUERY_KEY) ?? ''

@@ -1,10 +1,10 @@
 "use server"
 
 import { DirParams } from "@/lib/types";
-import { checkDirectoryExistsAsync, get } from "@/services/file-service";
+import { checkDirectoryExistsAsync, getDirectoryContent } from "@/services/file-service";
 
-export async function getAction(params: DirParams) {
-  const result = await get(params)
+export async function getDirectoryContentAction(params: DirParams) {
+  const result = await getDirectoryContent(params)
   // console.log('getAction', result);
 
   if (result) {
@@ -25,3 +25,4 @@ export async function checkDirAction(dir: string | undefined | null) {
   }
   return await checkDirectoryExistsAsync(dir)
 }
+

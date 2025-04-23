@@ -1,6 +1,6 @@
 "use client"
 
-import { checkDirAction, getAction } from "@/actions/file";
+import { checkDirAction, getDirectoryContentAction } from "@/actions/file";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PreferencesContext } from "@/data/preferences-provider";
 import { useDirParams } from "@/lib/hooks/use-dir-params";
@@ -28,7 +28,7 @@ export function ContentArea({ }: {}) {
 
   const [content, setContent] = useState([] as FileInfo[])
   useEffect(() => {
-    getAction(dirParams)
+    getDirectoryContentAction(dirParams)
       .then(d => {
         if (d && d.success) {
           setContent(d.content ?? [])
@@ -46,7 +46,7 @@ export function ContentArea({ }: {}) {
     <div className="h-full w-full">
       <Toolbar path={dirPath} />
       <ScrollArea className="h-[calc(100%-9.7rem)] w-full">
-        {content.map(c => <ItemInfo key={c.fullPath} file={c} />)}
+        {content.map(c => <ItemInfo key={c.fullPath} file={c} directory={dirPath} />)}
         <ScrollBar />
       </ScrollArea>
     </div>
@@ -55,9 +55,10 @@ export function ContentArea({ }: {}) {
 
 type ItemInfoProps = {
   file: FileInfo,
+  directory: string
 }
 
-function ItemInfo({ file, }: ItemInfoProps) {
+function ItemInfo({ file, directory }: ItemInfoProps) {
 
   const [preferences,] = useContext(PreferencesContext)
   const showType = preferences.showType
@@ -65,49 +66,37 @@ function ItemInfo({ file, }: ItemInfoProps) {
 
   const { name, fullPath, isDirectory, isFile, ext } = file
   const color = isFile ? generateColor(ext) : preferences.theme == 'dark' ? "#666" : "#ddd"
+  let twSize = getIconSize()
 
-  const icon = <FileIcon
-    color={color}
-    labelColor={preferences.theme == 'dark' ? "white" : "black"}
-    labelTextColor={preferences.theme == 'dark' ? "black" : "white"}
-    type={isDirectory ? 'drive' : 'spreadsheet'}
-    extension={isFile ? ext : ""}
-    isDirectory={isDirectory}
-  />
+  let icon = (
+    <div className={twSize}>
+      <FileIcon
+        color={color}
+        labelColor={preferences.theme == 'dark' ? "white" : "black"}
+        labelTextColor={preferences.theme == 'dark' ? "black" : "white"}
+        type={isDirectory ? 'drive' : 'spreadsheet'}
+        extension={isFile ? ext : ""}
+        isDirectory={isDirectory}
+      />
+    </div>
+  )
 
-  let twSize = "max-w-24";
-  switch (size) {
-    case 'xs':
-      twSize = "max-w-12";
-      break;
-    case 'sm':
-      twSize = "max-w-16";
-      break;
-    case 'lg':
-      twSize = "max-w-32";
-      break;
-    case 'xl':
-      twSize = "max-w-36";
-      break;
-    case '2xl':
-      twSize = "max-w-48";
-      break;
 
-    default:
-      break;
+
+  if (isFile && isRenderableImage(ext)) {
+    const imgPath = '/api/file?path=' + fullPath + '&ext=' + ext
+    icon = <img src={imgPath} className={`${twSize} border-r-2 rounded-3xl object-cover`} />
   }
 
   let content = (
     <div className="flex items-center justify-start gap-4 p-2">
-      <div className="max-w-8 w-8">
-        {icon}
-      </div>
+      {icon}
       <p className="text-sm ">{name}</p>
     </div>
   )
   if (showType == "icon") {
     content = (
-      <div className={`w-full inline-block m-4 ${twSize}`}>
+      <div className={`w-full inline-block m-4 ${twSize} justify-between `}>
         {icon}
         <p className="text-sm text-center w-full overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
       </div>
@@ -123,4 +112,53 @@ function ItemInfo({ file, }: ItemInfoProps) {
       {content}
     </Link>
   )
+}
+
+function isRenderableImage(extension: string): boolean {
+  const ext = extension.toLowerCase();
+  const renderableExtensions = new Set([
+    "png",
+    "jpg",
+    "jpeg",
+    "gif",
+    "bmp",
+    "webp",
+    "ico",
+    "svg",
+  ]);
+  return renderableExtensions.has(ext || "");
+}
+
+function getIconSize() {
+
+  const [preferences,] = useContext(PreferencesContext)
+  const showType = preferences.showType
+
+  if (showType !== "icon") {
+    return "w-8 h-10"
+  }
+  const size = preferences.size
+
+  let twSize = "w-24 h-30";
+  switch (size) {
+    case 'xs':
+      twSize = "w-12 h-15";
+      break;
+    case 'sm':
+      twSize = "w-16 h-20";
+      break;
+    case 'lg':
+      twSize = "w-32 h-40";
+      break;
+    case 'xl':
+      twSize = "w-36 h-45";
+      break;
+    case '2xl':
+      twSize = "w-48 h-60";
+      break;
+
+    default:
+      break;
+  }
+  return twSize
 }

@@ -36,7 +36,7 @@ async function* readDirectory(directory: string, searchKey: string): AsyncGenera
 }
 
 // Function to get files and folders with pagination and search
-export async function get(dirParams: DirParams): Promise<FileInfo[]> {
+export async function getDirectoryContent(dirParams: DirParams): Promise<FileInfo[]> {
   const directory = dirParams.path;
   let skip = dirParams.skip;
   const limit = dirParams.take;
@@ -65,4 +65,8 @@ export async function get(dirParams: DirParams): Promise<FileInfo[]> {
 function getExt(name: string) {
   const ext = name.includes('.') ? name.split('.').slice(-1)[0] : ''
   return ext
+}
+
+export function getFileBuffer(filePath: string): Promise<Buffer> {
+  return fs.readFile(filePath);
 }
