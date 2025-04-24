@@ -79,9 +79,7 @@ function ItemInfo({ file }: ItemInfoProps) {
     </div>
   )
 
-
-
-  if (isFile && isRenderableImage(ext)) {
+  if (isFile && isRenderableImage(ext) && preferences.previewImgs) {
     const imgPath = '/api/file?path=' + fullPath + '&ext=' + ext
     icon = <img src={imgPath} className={`${twSize} rounded-md object-cover`} />
   }

@@ -7,6 +7,7 @@ type Preferences = {
   lang: "en" | "tr",
   showType: "icon" | "list",
   size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+  previewImgs: boolean,
 }
 
 export const PreferencesContext = createContext({} as [Preferences, React.Dispatch<React.SetStateAction<Preferences>>]);
@@ -21,7 +22,8 @@ export function PreferenceProvider({ children }: { children: React.ReactNode }) 
     theme: "light",
     lang: "tr",
     showType: "icon",
-    size: "md"
+    size: "md",
+    previewImgs: true,
   })
 
   return (

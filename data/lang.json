@@ -28,7 +28,8 @@
     { "key": "compress", "value": "Compress" },
     { "key": "back", "value": "Back" },
     { "key": "up", "value": "Up" },
-    { "key": "forward", "value": "Forward" }
+    { "key": "forward", "value": "Forward" },
+    { "key": "preview-images", "value": "Preview Image Files" }
   ],
   "tr": [
     { "key": "en", "value": "İngilizce" },
@@ -59,6 +60,7 @@
     { "key": "compress", "value": "Sıkıştır" },
     { "key": "back", "value": "Geri" },
     { "key": "up", "value": "Yukarı" },
-    { "key": "forward", "value": "İleri" }
+    { "key": "forward", "value": "İleri" },
+    { "key": "preview-images", "value": "Resim Dosyalarını Önizle" }
   ]
 }

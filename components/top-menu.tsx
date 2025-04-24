@@ -1,6 +1,7 @@
 'use client'
 import {
   Menubar,
+  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
@@ -27,6 +28,15 @@ export function TopMenu() {
 
   const { setTheme } = useTheme()
 
+  function handlePreviewImgChange(checked: boolean) {
+    if (checked) {
+      setPreferences(p => ({ ...p, previewImgs: true }))
+    }
+    else {
+      setPreferences(p => ({ ...p, previewImgs: false }))
+    }
+  }
+
   function handleShowTypeChange(checked: boolean) {
     if (checked) {
       setPreferences(p => ({ ...p, showType: "list" }))
@@ -37,41 +47,28 @@ export function TopMenu() {
   }
 
   function handleSizeChange(value: string) {
-    if (
-      value === "xs" || value === "sm" || value === "md" || value === "lg" || value === "xl" || value === "2xl"
-    ) {
-
+    if (value === "xs" || value === "sm" || value === "md" || value === "lg" || value === "xl" || value === "2xl") {
       setPreferences(p => ({ ...p, size: value }))
     }
     else {
       setPreferences(p => ({ ...p, size: 'md' }))
-
     }
   }
 
   function handleLangChange(value: string) {
-    if (
-      value === 'en' || value === 'tr'
-    ) {
-
+    if (value === 'en' || value === 'tr') {
       setPreferences(p => ({ ...p, lang: value }))
     }
     else {
       setPreferences(p => ({ ...p, lang: 'tr' }))
-
     }
   }
   function handleThemeChange(value: string) {
-    if (
-      value === 'dark' || value === 'light' || value === 'system'
-    ) {
-
+    if (value === 'dark' || value === 'light' || value === 'system') {
       setTheme(value)
       setPreferences(p => ({ ...p, theme: value }))
-    }
-    else {
+    } else {
       setPreferences(p => ({ ...p, theme: 'system' }))
-
     }
   }
 
@@ -98,7 +95,7 @@ export function TopMenu() {
                 <MenubarRadioItem value="lg" onClick={() => handleSizeChange('lg')}>{txt('lg')}</MenubarRadioItem>
                 <MenubarRadioItem value="xl" onClick={() => handleSizeChange('xl')}>{txt('xl')}</MenubarRadioItem>
                 <MenubarRadioItem value="2xl" onClick={() => handleSizeChange('2xl')}>{txt('2xl')}</MenubarRadioItem>
-              </MenubarRadioGroup>
+              </MenubarRadioGroup>ı
             </MenubarSubContent>
           </MenubarSub>
           <MenubarSeparator />
@@ -106,6 +103,10 @@ export function TopMenu() {
             <MenubarRadioItem value="list" onClick={() => handleShowTypeChange(true)}>{txt('list')}</MenubarRadioItem>
             <MenubarRadioItem value="icon" onClick={() => handleShowTypeChange(false)}>{txt('icon')}</MenubarRadioItem>
           </MenubarRadioGroup>
+          <MenubarSeparator />
+          <MenubarCheckboxItem checked={preferences.previewImgs} onClick={() => handlePreviewImgChange(!preferences.previewImgs)}          >
+            {txt('preview-images')}
+          </MenubarCheckboxItem>
         </MenubarContent>
       </MenubarMenu>
 

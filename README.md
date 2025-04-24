@@ -7,7 +7,7 @@ A web app for exploring local files
 
 
 ## TODO
-- [ ] Add preview preference for images
+- [x] Add preview preference for images
 - [ ] Add support for sorting the files
 - [ ] Add support for searching the file content
 - [ ] Add support for downloading the file
