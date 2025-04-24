@@ -46,7 +46,7 @@ export function ContentArea({ }: {}) {
     <div className="h-full w-full">
       <Toolbar path={dirPath} />
       <ScrollArea className="h-[calc(100%-9.7rem)] w-full">
-        {content.map(c => <ItemInfo key={c.fullPath} file={c} directory={dirPath} />)}
+        {content.map(c => <ItemInfo key={c.fullPath} file={c} />)}
         <ScrollBar />
       </ScrollArea>
     </div>
@@ -55,14 +55,12 @@ export function ContentArea({ }: {}) {
 
 type ItemInfoProps = {
   file: FileInfo,
-  directory: string
 }
 
-function ItemInfo({ file, directory }: ItemInfoProps) {
+function ItemInfo({ file }: ItemInfoProps) {
 
   const [preferences,] = useContext(PreferencesContext)
   const showType = preferences.showType
-  const size = preferences.size
 
   const { name, fullPath, isDirectory, isFile, ext } = file
   const color = isFile ? generateColor(ext) : preferences.theme == 'dark' ? "#666" : "#ddd"
@@ -85,20 +83,20 @@ function ItemInfo({ file, directory }: ItemInfoProps) {
 
   if (isFile && isRenderableImage(ext)) {
     const imgPath = '/api/file?path=' + fullPath + '&ext=' + ext
-    icon = <img src={imgPath} className={`${twSize} border-r-2 rounded-3xl object-cover`} />
+    icon = <img src={imgPath} className={`${twSize} rounded-md object-cover`} />
   }
 
   let content = (
     <div className="flex items-center justify-start gap-4 p-2">
       {icon}
-      <p className="text-sm ">{name}</p>
+      <p className="text-lg ">{name}</p>
     </div>
   )
   if (showType == "icon") {
     content = (
-      <div className={`w-full inline-block m-4 ${twSize} justify-between `}>
+      <div className={`inline-block m-4 ${twSize} justify-between `}>
         {icon}
-        <p className="text-sm text-center w-full overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
+        <p className="text-lg text-center overflow-ellipsis overflow-hidden text-nowrap ">{name}</p>
       </div>
     )
   }
@@ -139,10 +137,10 @@ function getIconSize() {
   }
   const size = preferences.size
 
-  let twSize = "w-24 h-30";
+  let twSize = "w-24 h-32";
   switch (size) {
     case 'xs':
-      twSize = "w-12 h-15";
+      twSize = "w-12 h-16";
       break;
     case 'sm':
       twSize = "w-16 h-20";
@@ -151,7 +149,7 @@ function getIconSize() {
       twSize = "w-32 h-40";
       break;
     case 'xl':
-      twSize = "w-36 h-45";
+      twSize = "w-36 h-44";
       break;
     case '2xl':
       twSize = "w-48 h-60";
